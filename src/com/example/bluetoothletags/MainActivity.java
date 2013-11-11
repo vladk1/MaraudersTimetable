@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,14 +25,20 @@ public class MainActivity extends Activity {
 
 	    // Stops scanning after 10 seconds.
    int SCAN_PERIOD = 1000;
-   int MESSAGE_LENGTH = 10;
+   
+   int MESSAGE_LENGTH_S1 = 10;
+   int MESSAGE_LENGTH_S2 = 10;
       
+   
+   
    ArrayList<String> array_list;
 	  
    ArrayList<String> array_listMAC1;
    ArrayList<String> array_listMAC2;
    ArrayList<String> array_listNAME1;
    ArrayList<String> array_listNAME2;
+   
+  
 	
 	  
    ArrayAdapter<String> aa;
@@ -39,13 +46,13 @@ public class MainActivity extends Activity {
    String MACSource1 = "";
    String MACSource2 = "";
    
+   String finalData1="";
+   String finalData2="";
+   
     
-	    
-	
    private BluetoothAdapter mBluetoothAdapter;
    private Handler mHandler;
 
-    
    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +96,7 @@ public class MainActivity extends Activity {
        
         mHandler.postAtTime(rScanRepeat, SystemClock.uptimeMillis());        
         
-        Button resetButton = (Button) findViewById(R.id.resetButton);
-        
+        Button resetButton = (Button) findViewById(R.id.resetButton); 
         resetButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -100,6 +106,33 @@ public class MainActivity extends Activity {
 			array_listMAC1.clear();
 			array_listMAC2.clear();
 			
+			}
+        });
+        
+        final Intent intent=new Intent(this,DisplayInfo.class);
+		
+        Button displayInfo1 = (Button) findViewById(R.id.displayInfo1); 
+        displayInfo1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Intent intent = new Intent(this, DispalyInfo.class);
+				intent.putExtra("big_string", finalData1);
+				
+				startActivity(intent);
+			}
+        });
+        
+        Button displayInfo2 = (Button) findViewById(R.id.displayInfo2); 
+        displayInfo2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Intent intent = new Intent(this, DispalyInfo.class);
+				//Intent intent = new Intent(this, DispalyInfo.class);
+				intent.putExtra("big_string", finalData2);
+				
+				startActivity(intent);
 			}
         });
         
@@ -160,7 +193,7 @@ public class MainActivity extends Activity {
 	                    	
 	                     	array_list.add(deviceName);
 	                     	aa.notifyDataSetChanged();
-	                     	
+	                     	            	
 	                     	// set name to the same MAC array source 
 	                     	// if has enough names, reads the message
 	                     	addNameToSameMACSource(deviceName, deviceMAC);
@@ -171,25 +204,53 @@ public class MainActivity extends Activity {
 	        }
 	        
 	        void addAndUploadStringArray1(String deviceName, String deviceMAC) {
-	        	MACSource1 = deviceMAC;
+	        	
+	        	int vlad = MESSAGE_LENGTH_S1;	
+	        	
+	        	if (deviceName.contains("}")) 
+	        		MESSAGE_LENGTH_S1 = Integer.parseInt(deviceMAC.substring(0, 2), 16) + 1; 
+	        	
+	        	
+	        		
+	        	MACSource1 = (String) deviceMAC.subSequence(2, deviceMAC.length()-1);
 	        	array_listNAME1.add(deviceName);
 	        	array_listMAC1.add(deviceMAC);
+	        	
+	        	ArrayList<String> vladarray1 = array_listMAC1;
+	        	ArrayList<String> vladarray2 = array_listNAME1;
+        	
+	        	
         		
-        		if (array_listMAC1.size() == MESSAGE_LENGTH) {
+        		if (array_listMAC1.size() == MESSAGE_LENGTH_S1) {
         			TextView showMessage = (TextView) findViewById(R.id.displayMessage1);
-        	    	showMessage.setText(getMessage(array_listNAME1, array_listMAC1));
+        			finalData1 = getMessage(array_listNAME1, array_listMAC1, MESSAGE_LENGTH_S1);
+        	    	showMessage.setText(finalData1);
+        	    	//parseToArrays(finalData1);
         		}
 	        }
 	        void addAndUploadStringArray2(String deviceName, String deviceMAC) {
-	        	MACSource2 = deviceMAC;
+	        	
+	        	int vlad = MESSAGE_LENGTH_S2;	
+	        	
+	        	
+	        	if (deviceName.contains("}")) 
+	        		MESSAGE_LENGTH_S2 = Integer.parseInt(deviceMAC.substring(0, 2), 16) + 1; 
+	        		
+	        	MACSource2 = (String) deviceMAC.subSequence(2, deviceMAC.length()-1);
 	        	array_listNAME2.add(deviceName);
 	        	array_listMAC2.add(deviceMAC);
 	        	
-        		if (array_listMAC2.size() == MESSAGE_LENGTH) {
+        		if (array_listMAC2.size() == MESSAGE_LENGTH_S2) {
         			TextView showMessage = (TextView) findViewById(R.id.displayMessage2);
-        	    	showMessage.setText(getMessage(array_listNAME2, array_listMAC2));
+        			finalData2 = getMessage(array_listNAME2, array_listMAC2, MESSAGE_LENGTH_S2);
+        	    	showMessage.setText(finalData2);
+        	    	//parseToArrays(finalData2);
         		}
 	        }
+	        
+	        
+	        	
+	        	
 	        
 	        
 	        
@@ -199,23 +260,19 @@ public class MainActivity extends Activity {
 	        		addAndUploadStringArray1(deviceName, deviceMAC);
 	        	}
 	        	else {
-	        		if ( deviceMAC.charAt(0) == MACSource1.charAt(0) ) {
+	        		if ( deviceMAC.substring(2, deviceMAC.length()-1).equals(MACSource1) ) {
 	        			addAndUploadStringArray1(deviceName, deviceMAC);
 	        		}
 	        		else if  (MACSource2.isEmpty()) {
 		        		addAndUploadStringArray2(deviceName, deviceMAC);
 		        	}
 	        		else {
-		        		if (deviceMAC.charAt(0) == MACSource2.charAt(0)) {
+		        		if (deviceMAC.substring(2, deviceMAC.length()-1).equals(MACSource2)) {
 		        			addAndUploadStringArray2(deviceName, deviceMAC);
 		        		}
 		        	}
 	        	}
 	        	
-	        	
-	        	
-	        
-	        	       	
 	        }
 	        
 	        private int checkIfAlreadyGot(String name) {
@@ -242,8 +299,9 @@ public class MainActivity extends Activity {
 	       	      
 	    };
 
+	    
 
-	    private String getMessage(ArrayList<String> name_array_list, ArrayList<String> address_array_list) {
+	    private String getMessage(ArrayList<String> name_array_list, ArrayList<String> address_array_list, int message_length) {
 	    	
 	    	int getMessage=1;
 	    	int messageCounter=0;
@@ -254,6 +312,7 @@ public class MainActivity extends Activity {
 	    	
 	    
 	    	
+			
 	    	while (getMessage==1) {
 	    	
 	    	  for(int counter = 0; counter < name_array_list.size(); counter++) {
@@ -267,14 +326,13 @@ public class MainActivity extends Activity {
 	    			  tag = forTag.charAt(0);
 	    		  }
 	          }
-	    	  if ( messageCounter >= MESSAGE_LENGTH ) 
+	    	  if ( messageCounter >= message_length ) 
 	    		  getMessage=0;
 	    	  
 	    	}
 	    	
 	    	return firstMessage;
 	    }
-	    
 	    
 	    
 	    

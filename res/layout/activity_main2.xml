@@ -9,44 +9,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
     
-    
     <TextView
-        android:id="@+id/displayMessage1"
+        android:id="@+id/displayMessage12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_data"
     />
-    <Button
-        android:id="@+id/displayInfo1"
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:text="@string/display_info"
-        />
-    
     
     <TextView
-        android:id="@+id/displayMessage2"
+        android:id="@+id/displayMessage22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_data"
     />
-    <Button
-        android:id="@+id/displayInfo2"
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:text="@string/display_info"
-        />
-    
     
     <Button
-        android:id="@+id/resetButton"
+        android:id="@+id/resetButton2"
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content"
         android:text="@string/reset"
     />
     
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/listview2"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:text="@string/hello_world" >

@@ -6,6 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="no_data">No data</string>
     <string name="reset">Reset</string>
-    
+    <string name="display_info">Display More</string>
 
 </resources>
