@@ -205,7 +205,6 @@ public class MainActivity extends Activity {
 	        
 	        void addAndUploadStringArray1(String deviceName, String deviceMAC) {
 	        	
-	        	int vlad = MESSAGE_LENGTH_S1;	
 	        	
 	        	if (deviceName.contains("}")) 
 	        		MESSAGE_LENGTH_S1 = Integer.parseInt(deviceMAC.substring(0, 2), 16) + 1; 
@@ -216,21 +215,17 @@ public class MainActivity extends Activity {
 	        	array_listNAME1.add(deviceName);
 	        	array_listMAC1.add(deviceMAC);
 	        	
-	        	ArrayList<String> vladarray1 = array_listMAC1;
-	        	ArrayList<String> vladarray2 = array_listNAME1;
-        	
+	        
 	        	
         		
         		if (array_listMAC1.size() == MESSAGE_LENGTH_S1) {
         			TextView showMessage = (TextView) findViewById(R.id.displayMessage1);
         			finalData1 = getMessage(array_listNAME1, array_listMAC1, MESSAGE_LENGTH_S1);
         	    	showMessage.setText(finalData1);
-        	    	//parseToArrays(finalData1);
+        	    	
         		}
 	        }
 	        void addAndUploadStringArray2(String deviceName, String deviceMAC) {
-	        	
-	        	int vlad = MESSAGE_LENGTH_S2;	
 	        	
 	        	
 	        	if (deviceName.contains("}")) 
@@ -244,7 +239,7 @@ public class MainActivity extends Activity {
         			TextView showMessage = (TextView) findViewById(R.id.displayMessage2);
         			finalData2 = getMessage(array_listNAME2, array_listMAC2, MESSAGE_LENGTH_S2);
         	    	showMessage.setText(finalData2);
-        	    	//parseToArrays(finalData2);
+        	    	
         		}
 	        }
 	        
